@@ -22,7 +22,7 @@ app.engine('handlebars', engine({
     layoutsDir: "",
 }));
 
-app.use('/main', mainRouter);
+app.use('/', mainRouter);
 
 
 module.exports = app
