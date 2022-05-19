@@ -1,0 +1,30 @@
+input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+select {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+label {
+    color: black;
+    font-size: x-large;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 900;
+}
+
+.box {
+    background-image: url("../coffee.gif");
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}

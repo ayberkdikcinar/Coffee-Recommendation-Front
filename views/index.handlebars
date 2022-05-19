@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+
+    <title>Coffee Bean Recommendation</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="box">
+        <div class="container-fluid text-center justify-content-center" style="margin-top: 3%;">
+            <label for="lang">Coffee Bean</label>
+            <div class="row d-flex justify-content-center text-center">
+                <div class="col-md-4">
+                    <select class="browser-default custom-select" onchange="run()" name="languages" id="coffees">
+                        {{#each data}}
+                        <option value="{{coffee_name}}">{{coffee_name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                <div class="spinner-border" id="loading" role="status" style='display:none'>
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div>
+                    <a class="btn btn-warning" name="submit" title="Submit" id="submit">Submit</a>
+                </div>
+            </div>
+            <div class="border border-warning" style="margin-top: 3%;">
+                <table class="table" id="table" style="background-color: white;">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Coffee.Name</th>
+                            <th scope="col">Species</th>
+                            <th scope="col">Farm.Name</th>
+                            <th scope="col">Producer</th>
+                            <th scope="col">Harvest.Year</th>
+                            <th scope="col">Processing.Method</th>
+                            <th scope="col">Aroma</th>
+                            <th scope="col">Flavor</th>
+                            <th scope="col">Acidity</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Altitude</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var selected_coffee_name = document.getElementById("coffees").value;
+
+        function run() {
+            selected_coffee_name = document.getElementById("coffees").value;
+        }
+
+        $('#submit').on('click', function (e) {
+            e.preventDefault();
+            $('#loading').show();
+            $('#submit').hide();
+            $.ajax({
+                type: 'POST',
+                url: '/main/closest',
+                data: {
+                    coffee_name: selected_coffee_name
+                },
+                cache: false,
+                success: (result) => {
+                    const table_body = document.getElementById('table-body');
+                    table_body.innerHTML = "";
+                    for (var i = 0; i < result.length; i++) {
+                        var tr = document.createElement("tr");
+                        tr.innerHTML = `<th scope="row">${i + 1}</th>
+                            <td>${result[i].coffee_name}</td>
+                            <td>${result[i].species}</td>
+                            <td>${result[i].farm_name}</td>
+                            <td>${result[i].producer}</td>
+                            <td>${result[i].harvest_year}</td>
+                            <td>${result[i].processing_method}</td>
+                            <td>${result[i].aroma}</td>
+                            <td>${result[i].flavor}</td>
+                            <td>${result[i].acidity}</td>
+                            <td>${result[i].balance}</td>
+                            <td>${result[i].altitude}</td>`
+                        table_body.append(tr);
+                    }
+                },
+                error: function (result) {
+                    alert("fail");
+                },
+                complete: function (result) {
+                    $('#submit').show();
+                    $('#loading').hide();
+
+                }
+
+            });
+
+        })
+
+    </script>
+</body>
+
+</html>
